@@ -1,0 +1,108 @@
+name: C++ Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  gcc:
+    name: GCC
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Vigenère Cipher with GCC
+        working-directory: cryptography/vigenere-cipher
+        run: |
+          g++ -std=c++17 -Wall -Wextra -pedantic \
+            src/encryption.cpp \
+            src/vigenere.cpp \
+            src/encryption-driver.cpp \
+            -Iinclude \
+            -o vigenere_cipher
+
+      - name: Test encryption and decryption
+        working-directory: cryptography/vigenere-cipher
+        run: |
+          ./vigenere_cipher << 'EOF'
+          encrypt data/Example.txt data/test-encrypted.txt PASSWORD
+          decrypt data/test-encrypted.txt data/test-decrypted.txt PASSWORD
+          quit
+          EOF
+
+          diff -u data/Example.txt data/test-decrypted.txt
+
+  clang:
+    name: Clang
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Vigenère Cipher with Clang
+        working-directory: cryptography/vigenere-cipher
+        run: |
+          clang++ -std=c++17 -Wall -Wextra -pedantic \
+            src/encryption.cpp \
+            src/vigenere.cpp \
+            src/encryption-driver.cpp \
+            -Iinclude \
+            -o vigenere_cipher
+
+      - name: Test encryption and decryption
+        working-directory: cryptography/vigenere-cipher
+        run: |
+          ./vigenere_cipher << 'EOF'
+          encrypt data/Example.txt data/test-encrypted.txt PASSWORD
+          decrypt data/test-encrypted.txt data/test-decrypted.txt PASSWORD
+          quit
+          EOF
+
+          diff -u data/Example.txt data/test-decrypted.txt
+
+  msvc:
+    name: MSVC
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Visual Studio environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build Vigenère Cipher with MSVC
+        working-directory: cryptography/vigenere-cipher
+        shell: cmd
+        run: |
+          cl /nologo /std:c++17 /W4 /EHsc /Iinclude ^
+            src\encryption.cpp ^
+            src\vigenere.cpp ^
+            src\encryption-driver.cpp ^
+            /Fe:vigenere_cipher.exe
+
+      - name: Test encryption and decryption
+        working-directory: cryptography/vigenere-cipher
+        shell: pwsh
+        run: |
+          @"
+          encrypt data/Example.txt data/test-encrypted.txt PASSWORD
+          decrypt data/test-encrypted.txt data/test-decrypted.txt PASSWORD
+          quit
+          "@ | .\vigenere_cipher.exe
+
+          $original = Get-Content -Raw data/Example.txt
+          $decrypted = Get-Content -Raw data/test-decrypted.txt
+
+          if ($original -ne $decrypted) {
+              Write-Error "Decrypted output does not match the original input."
+              exit 1
+          }
