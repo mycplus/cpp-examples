@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Configure MSVC environment
         if: runner.os == 'Windows'
@@ -83,7 +83,7 @@ jobs:
           decrypt out-sample.txt back-sample.txt PASSWORD
           quit
           EOF
-          diff -u data/Example.txt back-sample.txt
+          diff --strip-trailing-cr -u data/Example.txt back-sample.txt
 
       - name: Round trip - mixed case, punctuation, digits, multiple lines
         shell: bash
@@ -94,7 +94,7 @@ jobs:
           decrypt out-mixed.txt back-mixed.txt LEMON
           quit
           EOF
-          diff -u mixed.txt back-mixed.txt
+          diff --strip-trailing-cr -u mixed.txt back-mixed.txt
 
       - name: Identity key must leave the text unchanged
         shell: bash
@@ -103,7 +103,7 @@ jobs:
           encrypt data/Example.txt out-identity.txt A
           quit
           EOF
-          diff -u data/Example.txt out-identity.txt
+          diff --strip-trailing-cr -u data/Example.txt out-identity.txt
 
       - name: Known-answer test - ATTACK with LEMON gives LXFOPV
         shell: bash
@@ -113,8 +113,18 @@ jobs:
           encrypt canon.txt out-canon.txt LEMON
           quit
           EOF
-          echo "produced: $(cat out-canon.txt)"
-          grep -qx 'LXFOPV' out-canon.txt
+          produced=$(tr -d '\r\n' < out-canon.txt)
+          echo "produced: $produced"
+          test "$produced" = "LXFOPV"
+
+      - name: Diagnose a failed comparison
+        if: failure()
+        shell: bash
+        run: |
+          echo "--- byte dump of the files being compared ---"
+          for f in data/Example.txt back-sample.txt mixed.txt back-mixed.txt; do
+            [ -f "$f" ] && { echo "== $f"; od -c "$f" | head -5; }
+          done
 
   cmake:
     name: CMake build
@@ -124,7 +134,7 @@ jobs:
         working-directory: cryptography/vigenere-cipher
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Configure and build
         run: |
           cmake -S . -B build
@@ -141,7 +151,7 @@ jobs:
       ASAN_OPTIONS: detect_leaks=1
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Build with sanitizers
         run: |
           g++ -std=c++17 -g -fsanitize=address,undefined \
@@ -154,4 +164,4 @@ jobs:
           decrypt s1.txt s2.txt PASSWORD
           quit
           EOF
-          diff -u data/Example.txt s2.txt
+          diff --strip-trailing-cr -u data/Example.txt s2.txt
