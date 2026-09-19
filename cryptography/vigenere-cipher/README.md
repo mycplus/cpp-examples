@@ -4,7 +4,7 @@ A C++ implementation of the Vigenère cipher demonstrating inheritance, file I/O
 
 This example accompanies a programming tutorial published on [MYCPLUS](https://www.mycplus.com/).
 
-[![C++ Build](https://github.com/mycplus/cpp-examples/actions/workflows/cpp-build.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/cpp-build.yml)
+[![Vigenère Cipher](https://github.com/mycplus/cpp-examples/actions/workflows/vigenere-cipher.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/vigenere-cipher.yml)
 
 ## Project Structure
 

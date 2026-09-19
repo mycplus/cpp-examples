@@ -1,0 +1,157 @@
+name: Vigenere Cipher
+
+# Runs only when this example (or this workflow) changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cryptography/vigenere-cipher/**'
+      - '.github/workflows/vigenere-cipher.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'cryptography/vigenere-cipher/**'
+      - '.github/workflows/vigenere-cipher.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push to the same branch cancels the run it supersedes.
+concurrency:
+  group: vigenere-cipher-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }} C++${{ matrix.std }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: cryptography/vigenere-cipher
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: GCC,         os: ubuntu-latest,  std: 17,     exe: '' }
+          - { name: GCC,         os: ubuntu-latest,  std: 20,     exe: '' }
+          - { name: GCC,         os: ubuntu-latest,  std: 23,     exe: '' }
+          - { name: Clang,       os: ubuntu-latest,  std: 17,     exe: '' }
+          - { name: Clang,       os: ubuntu-latest,  std: 20,     exe: '' }
+          - { name: Clang,       os: ubuntu-latest,  std: 23,     exe: '' }
+          - { name: Apple Clang, os: macos-latest,   std: 17,     exe: '' }
+          - { name: MSVC,        os: windows-latest, std: 17,     exe: '.exe', msvc_std: 'c++17' }
+          - { name: MSVC,        os: windows-latest, std: latest, exe: '.exe', msvc_std: 'c++latest' }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure MSVC environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build (GCC)
+        if: matrix.name == 'GCC'
+        run: |
+          g++ -std=c++${{ matrix.std }} -Wall -Wextra -pedantic -Werror \
+              src/encryption.cpp src/vigenere.cpp src/encryption-driver.cpp \
+              -Iinclude -o vigenere_cipher
+
+      - name: Build (Clang)
+        if: matrix.name == 'Clang' || matrix.name == 'Apple Clang'
+        run: |
+          clang++ -std=c++${{ matrix.std }} -Wall -Wextra -pedantic -Werror \
+              src/encryption.cpp src/vigenere.cpp src/encryption-driver.cpp \
+              -Iinclude -o vigenere_cipher
+
+      - name: Build (MSVC)
+        if: matrix.name == 'MSVC'
+        shell: cmd
+        run: |
+          cl /nologo /std:${{ matrix.msvc_std }} /W4 /WX /EHsc /Iinclude ^
+             src\encryption.cpp ^
+             src\vigenere.cpp ^
+             src\encryption-driver.cpp ^
+             /Fe:vigenere_cipher.exe
+
+      - name: Round trip - sample text
+        shell: bash
+        run: |
+          ./vigenere_cipher${{ matrix.exe }} << 'EOF'
+          encrypt data/Example.txt out-sample.txt PASSWORD
+          decrypt out-sample.txt back-sample.txt PASSWORD
+          quit
+          EOF
+          diff -u data/Example.txt back-sample.txt
+
+      - name: Round trip - mixed case, punctuation, digits, multiple lines
+        shell: bash
+        run: |
+          printf 'Attack at dawn, Bob! Meet at 5pm.\nSecond line here.\n' > mixed.txt
+          ./vigenere_cipher${{ matrix.exe }} << 'EOF'
+          encrypt mixed.txt out-mixed.txt LEMON
+          decrypt out-mixed.txt back-mixed.txt LEMON
+          quit
+          EOF
+          diff -u mixed.txt back-mixed.txt
+
+      - name: Identity key must leave the text unchanged
+        shell: bash
+        run: |
+          ./vigenere_cipher${{ matrix.exe }} << 'EOF'
+          encrypt data/Example.txt out-identity.txt A
+          quit
+          EOF
+          diff -u data/Example.txt out-identity.txt
+
+      - name: Known-answer test - ATTACK with LEMON gives LXFOPV
+        shell: bash
+        run: |
+          printf 'ATTACK' > canon.txt
+          ./vigenere_cipher${{ matrix.exe }} << 'EOF'
+          encrypt canon.txt out-canon.txt LEMON
+          quit
+          EOF
+          echo "produced: $(cat out-canon.txt)"
+          grep -qx 'LXFOPV' out-canon.txt
+
+  cmake:
+    name: CMake build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cryptography/vigenere-cipher
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure and build
+        run: |
+          cmake -S . -B build
+          cmake --build build
+
+  sanitizers:
+    name: ASan + UBSan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cryptography/vigenere-cipher
+    env:
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+      ASAN_OPTIONS: detect_leaks=1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build with sanitizers
+        run: |
+          g++ -std=c++17 -g -fsanitize=address,undefined \
+              src/encryption.cpp src/vigenere.cpp src/encryption-driver.cpp \
+              -Iinclude -o vigenere_cipher_san
+      - name: Round trip under sanitizers
+        run: |
+          ./vigenere_cipher_san << 'EOF'
+          encrypt data/Example.txt s1.txt PASSWORD
+          decrypt s1.txt s2.txt PASSWORD
+          quit
+          EOF
+          diff -u data/Example.txt s2.txt
