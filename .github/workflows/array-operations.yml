@@ -1,0 +1,100 @@
+name: Array Operations
+
+on:
+  push:
+    branches: [main]
+    paths: ['arrays/array-operations/**', '.github/workflows/array-operations.yml']
+  pull_request:
+    branches: [main]
+    paths: ['arrays/array-operations/**', '.github/workflows/array-operations.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: array-operations-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }} C++${{ matrix.std }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: arrays/array-operations
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: GCC,         os: ubuntu-latest,  std: 17 }
+          - { name: GCC,         os: ubuntu-latest,  std: 20 }
+          - { name: Clang,       os: ubuntu-latest,  std: 17 }
+          - { name: Clang,       os: ubuntu-latest,  std: 20 }
+          - { name: Apple Clang, os: macos-latest,   std: 17 }
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build
+        run: |
+          CXX=g++; [ "${{ matrix.name }}" = "GCC" ] || CXX=clang++
+          $CXX -std=c++${{ matrix.std }} -Wall -Wextra -pedantic -Werror -Iinclude \
+               tests/test_array_ops.cpp -o test_array_ops
+          $CXX -std=c++${{ matrix.std }} -Wall -Wextra -pedantic -Werror -Iinclude \
+               src/array-demo.cpp -o array-demo
+      - name: Test suite
+        run: ./test_array_ops
+      - name: Demo runs and reports every operation
+        run: |
+          ./array-demo | tee demo.txt
+          for s in "traverse" "access and update" "linear search" "insertion" \
+                   "deletion" "array size" "multi-dimensional"; do
+            grep -q -- "-- $s" demo.txt || { echo "::error::missing section: $s"; exit 1; }
+          done
+          grep -q "40 found at index 3" demo.txt
+          grep -q "fixed.at(9) threw std::out_of_range" demo.txt
+
+  msvc:
+    name: MSVC C++17
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: arrays/array-operations
+        shell: cmd
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Build and test
+        run: |
+          cl /nologo /std:c++17 /EHsc /W4 /WX /Iinclude tests\test_array_ops.cpp /Fe:test_array_ops.exe
+          cl /nologo /std:c++17 /EHsc /W4 /WX /Iinclude src\array-demo.cpp /Fe:array-demo.exe
+          test_array_ops.exe
+          array-demo.exe
+
+  cmake:
+    name: CMake and ctest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: arrays/array-operations
+    steps:
+      - uses: actions/checkout@v5
+      - run: |
+          cmake -S . -B build
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    name: ASan + UBSan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: arrays/array-operations
+    env:
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v5
+      - run: |
+          g++ -std=c++17 -g -fsanitize=address,undefined -Iinclude \
+              tests/test_array_ops.cpp -o test_san
+          ./test_san
