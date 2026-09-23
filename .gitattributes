@@ -1,13 +1,3 @@
-# Normalise line endings so builds and byte comparisons behave the same
-# on Linux, macOS and Windows runners.
 * text=auto eol=lf
-
-# Visual Studio project files must stay CRLF
-*.sln  text eol=crlf
-*.vcxproj      text eol=crlf
-*.vcxproj.filters text eol=crlf
-
-# Never translate binaries
-*.png binary
-*.jpg binary
-*.zip binary
+*.sln     text eol=crlf
+*.vcxproj text eol=crlf

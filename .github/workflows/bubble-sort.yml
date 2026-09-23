@@ -1,0 +1,48 @@
+name: bubble-sort
+
+on:
+  push:
+    paths: ['sorting/bubble-sort/**', '.github/workflows/bubble-sort.yml']
+  pull_request:
+    paths: ['sorting/bubble-sort/**', '.github/workflows/bubble-sort.yml']
+
+defaults:
+  run:
+    working-directory: sorting/bubble-sort
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} -DCMAKE_BUILD_TYPE=Release
+      - name: Build (warnings are errors)
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tests under ASan and UBSan
+        run: |
+          g++ -std=c++17 -Wall -Wextra -pedantic -Werror -g -fsanitize=address,undefined \
+              -fno-sanitize-recover=all tests/test_bubble_sort.cpp -o t && ./t
+
+  msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build
+      - name: Build (/W4 /WX)
+        run: cmake --build build --config Release
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure

@@ -1,0 +1,5 @@
+ascending:  2 3 7 9 11 15
+descending: 15 11 9 7 3 2
+words:      apple fig kiwi pear
+by dept:    1:Ben 1:Dev 1:Fay 2:Ava 2:Cleo 3:Eli
+matches std::stable_sort: yes
