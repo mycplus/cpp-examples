@@ -43,7 +43,7 @@ int main()
     // operator[] does not check the index; at() throws std::out_of_range.
     try {
         (void)fixed.at(9);
-    } catch (const std::out_of_range &e) {
+    } catch (const std::out_of_range&) {
         std::cout << "fixed.at(9) threw std::out_of_range\n";
     }
 
