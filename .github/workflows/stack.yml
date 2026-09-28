@@ -1,0 +1,79 @@
+name: stack
+
+on:
+  push:
+    paths: ['data-structures/stack/**', '.github/workflows/stack.yml']
+  pull_request:
+    paths: ['data-structures/stack/**', '.github/workflows/stack.yml']
+
+defaults:
+  run:
+    working-directory: data-structures/stack
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} -DCMAKE_BUILD_TYPE=Release
+      - name: Build (warnings are errors)
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tests and demos under ASan and UBSan
+        run: |
+          flags="-std=c++17 -Wall -Wextra -pedantic -Werror -g -fsanitize=address,undefined -fno-sanitize-recover=all -Iinclude"
+          g++ $flags tests/test_stacks.cpp -o t  && ./t
+          g++ $flags src/stack_demo.cpp  -o d1 && ./d1 > /dev/null
+          g++ $flags src/linked_demo.cpp -o d2 && ./d2 > /dev/null
+      - name: The article's pitfalls are caught
+        run: |
+          # Recursive node destruction overflows the call stack.
+          g++ -std=c++17 -g -fsanitize=address pitfalls/recursive_destructor.cpp -o rd
+          if ./rd > rd.out 2> rd.log; then
+            echo "recursive_destructor: expected a crash, got a clean exit"; exit 1
+          fi
+          grep -q "AddressSanitizer: stack-overflow" rd.log || { cat rd.log; exit 1; }
+          echo "recursive_destructor: caught (stack-overflow)"
+          # top() on an empty std::stack: libstdc++ assertions turn UB into an abort.
+          g++ -std=c++17 -Wall -Wextra -pedantic -Werror -D_GLIBCXX_ASSERTIONS pitfalls/empty_top.cpp -o et
+          if ./et > et.out 2> et.log; then
+            echo "empty_top: expected an assertion failure, got a clean exit"; exit 1
+          fi
+          grep -q "Assertion '!this->empty()' failed" et.log || { cat et.log; exit 1; }
+          echo "empty_top: caught (assertion)"
+          # NULL as an "empty" marker: indistinguishable from 0 for int,
+          # a runtime abort for std::string in C++17, a compile error in C++23.
+          g++ -std=c++17 pitfalls/null_sentinel.cpp -o ns
+          if ./ns > ns.out 2> ns.log; then
+            echo "null_sentinel: expected an abort, got a clean exit"; exit 1
+          fi
+          grep -q "int: pop on empty      = 0" ns.out || { cat ns.out; exit 1; }
+          grep -q "basic_string: construction from null is not valid" ns.log || { cat ns.log; exit 1; }
+          if g++ -std=c++23 -c pitfalls/null_sentinel.cpp -o ns23.o 2> ns23.log; then
+            echo "null_sentinel: expected C++23 to reject it"; exit 1
+          fi
+          grep -q "use of deleted function" ns23.log || { cat ns23.log; exit 1; }
+          echo "null_sentinel: caught (runtime abort in C++17, compile error in C++23)"
+
+  msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build
+      - name: Build (/W4 /WX /permissive-)
+        run: cmake --build build --config Release
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
