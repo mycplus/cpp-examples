@@ -1,4 +1,4 @@
-# cpp-examples
+# C++ Examples
 
 C++ source code examples and projects accompanying C++ programming tutorials on [MYCPLUS.com](https://www.mycplus.com/).
 
@@ -11,6 +11,8 @@ C++ source code examples and projects accompanying C++ programming tutorials on 
 | [Vigenère Cipher](cryptography/vigenere-cipher/) | C++ implementation of the Vigenère cipher for encrypting and decrypting text. | [![Vigenère Cipher](https://github.com/mycplus/cpp-examples/actions/workflows/vigenere-cipher.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/vigenere-cipher.yml)    |
 | [Stack](data-structures/stack/) | `ArrayStack<T>` and `LinkedStack<T>`, with `std::stack` and three pitfall programs. | [![Stack](https://github.com/mycplus/cpp-examples/actions/workflows/stack.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/stack.yml) |
 | [Prime Numbers](math/prime-numbers/) | A constexpr primality test and a std::vector<bool> sieve. | [![Prime Numbers](https://github.com/mycplus/cpp-examples/actions/workflows/prime-numbers.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/prime-numbers.yml) |
+| [Brick Game](games/brick-game/)                  | A C++ implementation of a classic brick-breaking arcade game.                       | [![Brick Game](https://github.com/mycplus/cpp-examples/actions/workflows/brick-game.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/brick-game.yml)                   |
+
 
 ## About
 
