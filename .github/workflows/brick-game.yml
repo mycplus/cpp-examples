@@ -1,0 +1,63 @@
+name: brick-game
+
+on:
+  push:
+    paths: ['games/brick-game/**', '.github/workflows/brick-game.yml']
+  pull_request:
+    paths: ['games/brick-game/**', '.github/workflows/brick-game.yml']
+
+defaults:
+  run:
+    working-directory: games/brick-game
+
+jobs:
+  unix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04]
+        cc: [g++, clang++]
+        std: [17, 20]
+        include:
+          - os: macos-latest
+            cc: clang++
+            std: 17
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cc }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} -DCMAKE_BUILD_TYPE=Release
+      - name: Build (warnings are errors)
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Refuses to start without a terminal
+        run: |
+          if ./build/brick < /dev/null > out.txt 2> err.txt; then
+            echo "expected a non-zero exit without a terminal"; exit 1
+          fi
+          grep -q "needs an interactive terminal" err.txt
+      - name: Plays in a pseudo-terminal and restores it on q and Ctrl+C
+        run: python3 tests/play_in_pty.py build/brick
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tests and autoplay under ASan and UBSan
+        run: |
+          flags="-std=c++17 -Wall -Wextra -pedantic -Werror -g -fsanitize=address,undefined -fno-sanitize-recover=all -Iinclude"
+          g++ $flags tests/test_game.cpp src/game.cpp -o t1 && ./t1
+          g++ $flags tests/test_screen.cpp src/game.cpp src/screen.cpp -o t2 && ./t2
+          g++ $flags src/autoplay.cpp src/game.cpp src/screen.cpp -o ap && ./ap > /dev/null
+
+  msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build
+      - name: Build (/W4 /WX /permissive-)
+        run: cmake --build build --config Release
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
