@@ -28,6 +28,7 @@ BOOL WINAPI on_ctrl(DWORD)
 }
 #else
 termios saved;
+struct sigaction saved_int, saved_term;        // handlers to put back
 volatile std::sig_atomic_t interrupted = 0;
 
 extern "C" void on_signal(int)
@@ -63,8 +64,8 @@ Terminal::Terminal()
     struct sigaction sa {};
     sa.sa_handler = on_signal;
     sigemptyset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, nullptr);
-    sigaction(SIGTERM, &sa, nullptr);
+    sigaction(SIGINT, &sa, &saved_int);
+    sigaction(SIGTERM, &sa, &saved_term);
 #endif
     write("\x1b[?25l");                         // hide the cursor
 }
@@ -77,6 +78,8 @@ Terminal::~Terminal()
     SetConsoleMode(out_handle, saved_mode);
 #else
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &saved);
+    sigaction(SIGINT, &saved_int, nullptr);
+    sigaction(SIGTERM, &saved_term, nullptr);
 #endif
 }
 
