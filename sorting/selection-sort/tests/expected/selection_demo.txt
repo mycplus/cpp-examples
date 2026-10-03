@@ -1,0 +1,5 @@
+ascending:    5 10 13 14 22 29 37 41
+descending:   41 37 29 22 14 13 10 5
+forward_list: apple date fig kiwi pear
+by dept:      1:Cleo 2:Ben 2:Ava 3:Dev
+matches std::stable_sort: no

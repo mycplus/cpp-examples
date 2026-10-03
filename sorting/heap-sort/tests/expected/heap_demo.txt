@@ -1,0 +1,7 @@
+heap_sort:         5 10 13 14 22 29 37 41
+descending:        41 37 29 22 14 13 10 5
+strings:           apple date fig kiwi pear
+std::make_heap:    41 37 29 22 13 5 14 10
+std::sort_heap:    5 10 13 14 22 29 37 41
+partial_sort, 3:   5 10 13
+priority_queue:    41 37 29 22 14 13 10 5
