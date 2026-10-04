@@ -1,0 +1,3 @@
+input order:       e26 e33 e41 e46 e59
+std::sort:         e730 e341 e902 e664 e106
+std::stable_sort:  e26 e33 e41 e46 e59

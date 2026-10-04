@@ -1,0 +1,49 @@
+name: Library Sorts
+
+on:
+  push:
+    paths: ['sorting/library-sorts/**', '.github/workflows/library-sorts.yml']
+  pull_request:
+    paths: ['sorting/library-sorts/**', '.github/workflows/library-sorts.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [20, 23]
+    defaults:
+      run:
+        working-directory: sorting/library-sorts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+      - name: Comparator pitfall is caught
+        if: matrix.cxx == 'g++'
+        run: |
+          # std::sort with <= must be rejected by libstdc++ debug mode and by ASan
+          g++ -std=c++20 -O0 -D_GLIBCXX_DEBUG pitfalls/lte_comparator.cpp -o lte_dbg
+          if ./lte_dbg 2> dbg.txt; then echo "debug mode did not abort"; exit 1; fi
+          grep -q "irreflexive" dbg.txt
+          g++ -std=c++20 -O1 -g -fsanitize=address pitfalls/lte_comparator.cpp -o lte_asan
+          if ./lte_asan 2> asan.txt; then echo "ASan did not report"; exit 1; fi
+          grep -q "heap-buffer-overflow" asan.txt
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: sorting/library-sorts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test (MSVC)
+        run: |
+          cmake -S . -B build
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure
