@@ -28,6 +28,22 @@ jobs:
       - name: Run examples and compare output
         run: bash tests/run_tests.sh "$PWD/build"
 
+  # libc++ on Linux: the standard library Apple ships, so library gaps
+  # (for example std::atomic<std::shared_ptr>) show up here as well as on macOS.
+  linux-libcxx:
+    name: Linux clang++ libc++
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libc++
+        run: sudo apt-get update && sudo apt-get install -y libc++-dev libc++abi-dev
+      - name: Configure and build (-Werror)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++
+          cmake --build build -j
+      - name: Run examples (portable outputs)
+        run: bash tests/run_tests.sh "$PWD/build" --portable
+
   sanitizers:
     name: Sanitizers ${{ matrix.cxx }}
     runs-on: ubuntu-24.04

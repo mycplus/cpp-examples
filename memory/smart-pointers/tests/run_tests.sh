@@ -17,15 +17,25 @@ exe() {   # locate an executable in single- and multi-config build trees
     echo "missing executable: $1" >&2; exit 1
 }
 
+# Runs an example from inside the build directory and strips the \r that
+# MSVC's text-mode stdout adds, so the same comparisons work on every runner.
+run() {
+    local path
+    path=$(exe "$1")
+    shift
+    (cd "$build" && "$path" "$@") | tr -d '\r'
+}
+
 check_output() {
     local name=$1
-    local out
-    out=$(cd "$build" && "$(exe "$name")")
-    if diff --strip-trailing-cr <(printf '%s\n' "$out") "$here/expected/$name.txt" >/dev/null; then
+    local out expected
+    out=$(run "$name")
+    expected=$(tr -d '\r' < "$here/expected/$name.txt")
+    if [ "$out" = "$expected" ]; then
         echo "PASS $name"
     else
         echo "FAIL $name: output differs from expected/$name.txt"
-        diff --strip-trailing-cr <(printf '%s\n' "$out") "$here/expected/$name.txt" || true
+        diff <(printf '%s\n' "$out") <(printf '%s\n' "$expected") || true
         fail=1
     fi
 }
@@ -37,17 +47,21 @@ if [ "$portable" != "--portable" ]; then
     check_output allocations
     check_output shared_from_this
 else
-    "$(exe shared_from_this)" >/dev/null && echo "PASS shared_from_this (exit status only)"
+    run shared_from_this >/dev/null && echo "PASS shared_from_this (exit status only)"
 fi
 
-if "$(exe long_list)" 1000000 iterative | grep -q '^destroyed$'; then
+if run long_list 1000000 iterative | grep -q '^destroyed$'; then
     echo "PASS long_list: 1,000,000 nodes destroyed iteratively"
 else
     echo "FAIL long_list iterative"; fail=1
 fi
 
-"$(exe threads)" | grep -q '^copies: done' && echo "PASS threads (copies)" || { echo "FAIL threads"; fail=1; }
-"$(exe atomic_shared)" | grep -q 'from a final store' && echo "PASS atomic_shared" || { echo "FAIL atomic_shared"; fail=1; }
-"$(exe sizes)"
+if run threads | grep -q '^copies: done'; then echo "PASS threads (copies)"; else echo "FAIL threads"; fail=1; fi
+if run atomic_shared | grep -q 'from a final store'; then
+    echo "PASS atomic_shared ($(run atomic_shared | sed "s/: done.*//"))"
+else
+    echo "FAIL atomic_shared"; fail=1
+fi
+run sizes
 
 exit $fail

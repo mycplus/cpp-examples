@@ -20,7 +20,7 @@ Each program in `src/` is self-contained and matches a listing in the article.
 | `src/shared_from_this.cpp` | `enable_shared_from_this`, and `std::bad_weak_ptr` when it is misused |
 | `src/long_list.cpp` | Recursive destruction of a long `unique_ptr` chain, and the iterative fix |
 | `src/threads.cpp` | Copying a `shared_ptr` across threads (safe) vs assigning one object from two threads (a race) |
-| `src/atomic_shared.cpp` | C++20 `std::atomic<std::shared_ptr<T>>` |
+| `src/atomic_shared.cpp` | C++20 `std::atomic<std::shared_ptr<T>>` where the library provides it, a mutex otherwise |
 | `tests/compile-fail/copy_unique.cpp` | Must not compile: `unique_ptr` has no copy constructor |
 | `tests/sanitizer-fail/two_owners.cpp` | Two control blocks for one object; AddressSanitizer reports a double free |
 
@@ -33,7 +33,10 @@ bash tests/run_tests.sh "$PWD/build"      # add --portable on macOS or Windows
 bash tests/sanitizers.sh g++              # Linux only; also accepts clang++
 ```
 
-C++17 throughout, except `atomic_shared.cpp`, which needs C++20. Warnings are
+C++17 throughout, except `atomic_shared.cpp`, which is built as C++20. It uses
+`std::atomic<std::shared_ptr<T>>` when the standard library defines
+`__cpp_lib_atomic_shared_ptr` (libstdc++ does) and falls back to a
+`std::mutex` when it does not (libc++ 18, and the libc++ in Xcode 26.6, do not). Warnings are
 errors (`-Wall -Wextra -pedantic -Werror`, or `/W4 /WX` on MSVC).
 
 ## What the build checks
@@ -47,8 +50,10 @@ errors (`-Wall -Wextra -pedantic -Werror`, or `/W4 /WX` on MSVC).
   reported; ThreadSanitizer reports the shared-assignment race and nothing for
   the copies or the `std::atomic<std::shared_ptr>` version; copying a
   `unique_ptr` fails to compile.
-- **macOS (Apple Clang) and Windows (MSVC):** build with warnings as errors and
-  compare the outputs that do not depend on the standard library implementation.
+- **Linux (Clang with libc++), macOS (Apple Clang) and Windows (MSVC):** build
+  with warnings as errors and compare the outputs that do not depend on the
+  standard library implementation. Output comparisons ignore `\r`, because MSVC
+  writes `\r\n` to stdout.
 
 The `shared_ptr` cycle is checked by its output (no destructor runs), not by
 LeakSanitizer, whose result for that program varies with the compiler and
