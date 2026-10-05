@@ -1,0 +1,21 @@
+1. factory
+  Widget 1 created
+2. move into b
+  a is null, b owns Widget 1
+3. pass to a sink
+  consume() got Widget 1
+  Widget 1 destroyed
+  back in main, b is null
+4. reset replaces the owned object
+  Widget 2 created
+  Widget 3 created
+  Widget 2 destroyed
+5. release gives up ownership without destroying
+  c is null, raw->id = 3
+  Widget 3 destroyed
+6. array form
+  values[0] = 0
+  values[1] = 0
+  values[2] = 7
+  values[3] = 0
+7. end of main

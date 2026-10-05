@@ -1,0 +1,2 @@
+  team.use_count() = 2, lead.use_count() = 2
+  build_team() returned

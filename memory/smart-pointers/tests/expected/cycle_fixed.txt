@@ -1,0 +1,6 @@
+  team.use_count() = 1, lead.use_count() = 2
+  team is alive, use_count while locked = 2
+  ~Team
+  left scope; expired() = true
+  team no longer exists
+  ~Employee

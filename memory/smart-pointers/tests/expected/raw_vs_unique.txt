@@ -1,0 +1,5 @@
+parse_raw(bad input):
+  acquire raw
+parse_unique(bad input):
+  acquire unique
+  release unique

@@ -1,0 +1,7 @@
+  load grass.png
+after make_shared:  use_count = 1
+after copy:         use_count = 2
+after move:         use_count = 2 (second is null)
+after inner scope:  use_count = 1
+  free grass.png
+after reset:        first is null

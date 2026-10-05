@@ -1,0 +1,5 @@
+  fclose() called
+  read back: written through a unique_ptr<FILE>
+  missing file handle is null
+  fclose() called
+  end of main

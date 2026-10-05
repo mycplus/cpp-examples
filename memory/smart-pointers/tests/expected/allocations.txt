@@ -1,0 +1,16 @@
+std::make_shared<Payload>()
+  operator new                 48 bytes
+  -- created; take a weak_ptr
+  -- owner.reset()
+  ~Payload()
+  -- weak_ptr leaves scope
+  operator delete
+std::shared_ptr<Payload>(new Payload)
+  operator new                 32 bytes
+  operator new                 24 bytes
+  -- created; take a weak_ptr
+  -- owner.reset()
+  ~Payload()
+  operator delete
+  -- weak_ptr leaves scope
+  operator delete
