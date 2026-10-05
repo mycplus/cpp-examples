@@ -1,0 +1,45 @@
+name: Knapsack
+
+on:
+  push:
+    paths: ['dynamic-programming/knapsack/**', '.github/workflows/knapsack.yml']
+  pull_request:
+    paths: ['dynamic-programming/knapsack/**', '.github/workflows/knapsack.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: dynamic-programming/knapsack
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+      - name: Sanitizers
+        run: |
+          cmake -S . -B asan -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
+                -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-sanitize-recover=all -g"
+          cmake --build asan
+          ctest --test-dir asan --output-on-failure
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: dynamic-programming/knapsack
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test (MSVC)
+        run: |
+          cmake -S . -B build
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure
