@@ -13,6 +13,7 @@ C++ source code examples and projects accompanying C++ programming tutorials on 
 | [Prime Numbers](math/prime-numbers/) | A constexpr primality test and a std::vector<bool> sieve. | [![Prime Numbers](https://github.com/mycplus/cpp-examples/actions/workflows/prime-numbers.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/prime-numbers.yml) |
 | [Brick Game](games/brick-game/)                  | A C++ implementation of a classic brick-breaking arcade game.                       | [![Brick Game](https://github.com/mycplus/cpp-examples/actions/workflows/brick-game.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/brick-game.yml)                   |
 | [Knapsack](dynamic-programming/knapsack/) | 0/1 knapsack by dynamic programming in C++17, returning the chosen items. | [![Knapsack](https://github.com/mycplus/cpp-examples/actions/workflows/knapsack.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/knapsack.yml) |
+| [Towers of Hanoi](recursion/towers-of-hanoi/) | Header-only recursive and iterative Towers of Hanoi with a callback per move. | [![Towers of Hanoi](https://github.com/mycplus/cpp-examples/actions/workflows/towers-of-hanoi.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/towers-of-hanoi.yml) |
 
 
 ## About
