@@ -1,0 +1,3 @@
+count_if: 488 matches, predicate called 1000 times for 1000 elements
+find_if:  first match at index 2, predicate called 3 times
+sort:     11272 comparisons; N log2 N = 9965

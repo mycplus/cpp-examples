@@ -1,0 +1,5 @@
+not_fn:  1 0 0 0 1 
+squares: 1.5129 8348.48 3210.47 539.633 398.362 1 9.86959 
+mem_fn:  0 20 60 120 200 
+shapes:  Circle::draw Square::draw 
+bind:    2 equal to 20, 2 not equal

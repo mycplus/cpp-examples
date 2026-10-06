@@ -1,0 +1,6 @@
+searching 1000000 ints for 765432
+std::find on vector:           765433 comparisons
+std::binary_search on vector:  21 comparisons
+std::set::find:                22 comparisons
+std::unordered_set::find:      1 comparisons
+same, constant hash, 10000 ints: 2346 comparisons

@@ -1,0 +1,3 @@
+index:   best score = 90
+reserve: best score = 90, storage moved: no
+list:    best score = 90

@@ -1,0 +1,4 @@
+all:      10 20 3 45 15 8 30 
+at most 15: 10 3 15 8 
+doubled:  20 40 6 90 30 16 60 
+sizes: values 7, doubled 7

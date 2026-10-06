@@ -1,0 +1,4 @@
+descending: 9 8 5 3 2 1
+above 4: 3
+sum of squares: 184
+by salary: erin(4100) dana(5200) finn(5200)

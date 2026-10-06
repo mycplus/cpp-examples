@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.16)
+project(stl_containers CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+foreach(example list_operations list_sort_moves invalidation_tools)
+    add_executable(${example} src/${example}.cpp)
+    if(MSVC)
+        target_compile_options(${example} PRIVATE /W4 /WX /permissive- /EHsc)
+    else()
+        target_compile_options(${example} PRIVATE -Wall -Wextra -pedantic -Werror)
+    endif()
+endforeach()

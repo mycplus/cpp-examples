@@ -1,0 +1,6 @@
+start           size 7: 1 0 2 0 3 0 4
+after remove    size 7: 1 2 3 4 3 0 4
+                kept elements end at index 4
+after erase     size 4: 1 2 3 4
+C++20 std::erase size 4: 1 2 3 4
+                removed 3 elements

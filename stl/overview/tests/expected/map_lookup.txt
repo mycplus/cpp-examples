@@ -1,0 +1,3 @@
+after operator[]: 3 keys, including "plums"
+find("cherries"): not found, still 3 keys
+at("figs"): threw std::out_of_range

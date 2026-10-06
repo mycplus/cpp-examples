@@ -1,0 +1,5 @@
+list::sort   copies 0, moves 0
+std::sort    copies 0, moves 9621
+key before sort:            37542
+list iterator now refers to 37542 (same element, new position 359)
+vector iterator refers to   7 (whatever value is now at index 0)

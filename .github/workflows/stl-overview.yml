@@ -1,0 +1,82 @@
+name: stl-overview
+
+on:
+  push:
+    paths: ['stl/overview/**', '.github/workflows/stl-overview.yml']
+  pull_request:
+    paths: ['stl/overview/**', '.github/workflows/stl-overview.yml']
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: stl/overview
+
+jobs:
+  linux:
+    name: Linux ${{ matrix.cxx }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and build (-Werror)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          cmake --build build -j
+      - name: Run examples and compare output
+        run: bash tests/run_tests.sh "$PWD/build"
+
+  # libc++ is the standard library Apple ships; library gaps show up here too.
+  linux-libcxx:
+    name: Linux clang++ libc++
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libc++
+        run: sudo apt-get update && sudo apt-get install -y libc++-dev libc++abi-dev
+      - name: Configure and build (-Werror)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++
+          cmake --build build -j
+      - name: Run examples (portable outputs)
+        run: bash tests/run_tests.sh "$PWD/build" --portable
+
+  sanitizers:
+    name: Sanitizers ${{ matrix.cxx }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: ASan, UBSan and the compile-fail tests
+        run: bash tests/sanitizers.sh ${{ matrix.cxx }}
+
+  macos:
+    name: macOS Apple Clang
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and build (-Werror)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+      - name: Run examples (portable outputs)
+        run: bash tests/run_tests.sh "$PWD/build" --portable
+
+  windows:
+    name: Windows MSVC
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and build (/W4 /WX)
+        shell: bash
+        run: |
+          cmake -S . -B build
+          cmake --build build --config Release
+      - name: Run examples (portable outputs)
+        shell: bash
+        run: bash tests/run_tests.sh "$PWD/build" --portable
