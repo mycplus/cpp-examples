@@ -1,0 +1,36 @@
+name: d3d11-clear
+on:
+  push:
+    paths: ['graphics/d3d11-clear/**', '.github/workflows/d3d11-clear.yml']
+  pull_request:
+    paths: ['graphics/d3d11-clear/**', '.github/workflows/d3d11-clear.yml']
+  workflow_dispatch:
+
+jobs:
+  windows-msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and build with MSVC (/W4 /WX)
+        run: |
+          cmake -S graphics/d3d11-clear -B build
+          cmake --build build --config Release
+      - name: Clear a texture on WARP and check its bytes
+        shell: bash
+        run: |
+          ./build/Release/warp_clear_test.exe | tee out.txt
+          grep -q '^first pixel bytes: 00 FF 00 FF' out.txt
+          grep -q '^PASS' out.txt
+  mingw-cross:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MinGW-w64
+        run: sudo apt-get update && sudo apt-get install -y g++-mingw-w64-x86-64
+      - name: Cross-compile with warnings as errors
+        run: |
+          cd graphics/d3d11-clear/src
+          x86_64-w64-mingw32-g++ -std=c++17 -Wall -Wextra -Werror -O2 -mwindows \
+              -o d3d11_clear.exe d3d11_clear.cpp -ld3d11
+          x86_64-w64-mingw32-g++ -std=c++17 -Wall -Wextra -Werror -O2 \
+              -o warp_clear_test.exe warp_clear_test.cpp -ld3d11
