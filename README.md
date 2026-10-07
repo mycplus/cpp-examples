@@ -14,6 +14,8 @@ C++ source code examples and projects accompanying C++ programming tutorials on 
 | [Brick Game](games/brick-game/)                  | A C++ implementation of a classic brick-breaking arcade game.                       | [![Brick Game](https://github.com/mycplus/cpp-examples/actions/workflows/brick-game.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/brick-game.yml)                   |
 | [Knapsack](dynamic-programming/knapsack/) | 0/1 knapsack by dynamic programming in C++17, returning the chosen items. | [![Knapsack](https://github.com/mycplus/cpp-examples/actions/workflows/knapsack.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/knapsack.yml) |
 | [Towers of Hanoi](recursion/towers-of-hanoi/) | Header-only recursive and iterative Towers of Hanoi with a callback per move. | [![Towers of Hanoi](https://github.com/mycplus/cpp-examples/actions/workflows/towers-of-hanoi.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/towers-of-hanoi.yml) |
+| [Towers of Hanoi](recursion/towers-of-hanoi/) | Header-only recursive and iterative Towers of Hanoi with a callback per move. | [![Towers of Hanoi](https://github.com/mycplus/cpp-examples/actions/workflows/towers-of-hanoi.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/towers-of-hanoi.yml) |
+| [Ten C++ Libraries](libraries/ten-cpp-libraries/) | One tested program each for the standard library, Boost, Qt, Eigen, libcurl, oneTBB, OpenCV, Catch2, POCO and {fmt}. | [![Ten C++ Libraries](https://github.com/mycplus/cpp-examples/actions/workflows/ten-cpp-libraries.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/ten-cpp-libraries.yml) |
 
 
 ## About

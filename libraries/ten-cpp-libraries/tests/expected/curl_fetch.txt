@@ -1,0 +1,2 @@
+fetch existing file: No error, 18 bytes
+fetch missing file: Couldn't read a file:// file

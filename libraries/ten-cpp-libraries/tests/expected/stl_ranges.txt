@@ -1,0 +1,5 @@
+16 distinct words
+the 4
+algorithm 1
+all 1
+longer than 6 letters: algorithm duplicates rejects

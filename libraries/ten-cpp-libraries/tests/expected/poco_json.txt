@@ -1,0 +1,5 @@
+course: C++
+open: true
+Ada 91
+Linus 78
+host www.example.com, port 8443, path /search, query q=c++&page=2

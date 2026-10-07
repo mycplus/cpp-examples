@@ -1,0 +1,6 @@
+left      |     right|
+       centred       
+pi to 3 places: 3.142, hex: 0xff, binary: 0b1010, padded:   1234567
+    3.14|00000042
+    3.14|00000042
+fmt and std::format agree: true

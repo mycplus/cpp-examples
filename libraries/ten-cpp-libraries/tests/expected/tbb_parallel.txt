@@ -1,0 +1,2 @@
+sum matches std::accumulate: true
+parallel_sort matches std::sort: true

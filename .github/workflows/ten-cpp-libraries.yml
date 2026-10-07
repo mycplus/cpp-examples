@@ -1,0 +1,36 @@
+name: Ten C++ Libraries
+
+on:
+  push:
+    paths: ['libraries/ten-cpp-libraries/**', '.github/workflows/ten-cpp-libraries.yml']
+  pull_request:
+    paths: ['libraries/ten-cpp-libraries/**', '.github/workflows/ten-cpp-libraries.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+    defaults:
+      run:
+        working-directory: libraries/ten-cpp-libraries
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the ten libraries from Ubuntu packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libboost-dev libfmt-dev catch2 \
+            libeigen3-dev libcurl4-openssl-dev libtbb-dev libopencv-dev libpoco-dev qt6-base-dev
+      - name: Build and test
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+      - name: Sanitizers
+        run: |
+          cmake -S . -B asan -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} \
+                -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-sanitize-recover=all -g"
+          cmake --build asan
+          ctest --test-dir asan --output-on-failure
