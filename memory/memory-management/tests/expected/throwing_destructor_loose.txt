@@ -1,0 +1,2 @@
+caught: flush failed
+end of main

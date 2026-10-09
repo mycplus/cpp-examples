@@ -1,0 +1,2 @@
+Buffer: a="Ada Lovelace" b="" c="Ida Lovelace"
+Name:   x="Grace Hopper" z="Trace Hopper"

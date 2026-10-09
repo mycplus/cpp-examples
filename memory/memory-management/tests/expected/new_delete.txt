@@ -1,0 +1,13 @@
+single object:
+  construct thermo
+  destroy   thermo
+array of objects:
+  construct left
+  construct right
+  destroy   right
+  destroy   left
+scalars:
+  zeroed: 0 0 0
+allocation failure:
+  new threw std::bad_alloc
+  new (std::nothrow) returned nullptr
