@@ -1,0 +1,6 @@
+by value:           copies: 1  name: report
+by const reference: copies: 0  name: report
+by reference:       copies: 0  name: report!
+by pointer:         copies: 0  name: report!?
+null pointer:       copies: 0  name: report!?
+returned by value:  copies: 0  name: draft

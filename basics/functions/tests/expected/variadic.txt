@@ -1,0 +1,4 @@
+average: 6.5
+1 2.5 c four (4 arguments)
+(0 arguments)
+sum: 10

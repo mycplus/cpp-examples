@@ -1,0 +1,4 @@
+even:      3
+above 6:   3
+twice +10: 21
+twice *3:  18

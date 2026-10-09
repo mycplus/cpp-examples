@@ -1,0 +1,6 @@
+int:         42
+double:      4.5
+int:         65
+double:      2.5
+int:         1
+string_view: text
