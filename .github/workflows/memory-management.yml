@@ -68,6 +68,11 @@ jobs:
         # PowerShell rather than Git Bash: Git's /usr/bin/link can shadow MSVC's link.exe.
         run: |
           New-Item -ItemType Directory -Force out | Out-Null
+          # Build one program; print the compiler's messages if it fails.
+          function Build($name, [string[]]$extra) {
+            $log = cl /nologo /std:c++17 /EHsc /O2 /W4 /WX @extra "/Fe:out\$name.exe" "/Fo:out\$name.obj" "src\$name.cpp" 2>&1
+            if ($LASTEXITCODE -ne 0) { $log | Write-Output; Write-Output "BUILD FAILED: $name"; exit 1 }
+          }
           function Compare-Output($exe, $arg, $expected) {
             $got  = (& $exe $arg 2>$null) -join "`n"
             $want = (Get-Content $expected) -join "`n"
@@ -75,10 +80,10 @@ jobs:
             Write-Output "PASS  $exe $arg"
           }
           foreach ($p in 'new_delete', 'ownership', 'exception_safety') {
-            cl /nologo /std:c++17 /EHsc /O2 /W4 /WX "/Fe:out\$p.exe" "src\$p.cpp" | Out-Null
-            if ($LASTEXITCODE -ne 0) { exit 1 }
+            Build $p @()
             Compare-Output "out\$p.exe" $null "tests\expected\$p.txt"
           }
-          cl /nologo /std:c++17 /EHsc /O2 /W4 /WX /wd4297 "/Fe:out\throwing_destructor.exe" src\throwing_destructor.cpp | Out-Null
-          if ($LASTEXITCODE -ne 0) { exit 1 }
+          # C4297 (function assumed not to throw) and C4722 (destructor never returns)
+          # are the diagnostics this example exists to demonstrate.
+          Build 'throwing_destructor' @('/wd4297', '/wd4722')
           Compare-Output "out\throwing_destructor.exe" "loose" "tests\expected\throwing_destructor_loose.txt"

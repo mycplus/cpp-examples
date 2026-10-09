@@ -16,10 +16,11 @@ foreach(prog new_delete ownership exception_safety)
 endforeach()
 
 # throwing_destructor exists to show the warning its compiler gives, so that
-# one warning is disabled and every other warning is still an error.
+# warning is disabled (two on MSVC: C4297 and C4722) and every other warning
+# is still an error.
 add_executable(throwing_destructor src/throwing_destructor.cpp)
 if(MSVC)
-    target_compile_options(throwing_destructor PRIVATE /W4 /WX /EHsc /wd4297)
+    target_compile_options(throwing_destructor PRIVATE /W4 /WX /EHsc /wd4297 /wd4722)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(throwing_destructor PRIVATE -Wall -Wextra -pedantic -Werror -Wno-exceptions)
 else()
