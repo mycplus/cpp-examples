@@ -1,0 +1,2 @@
+through Shape*: shape
+on a Circle:    circle

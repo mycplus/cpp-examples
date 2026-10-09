@@ -1,0 +1,5 @@
+shelf:
+  e-book: A Tour of C++ (page 42 of 320)
+  audiobook: The Pragmatic Programmer (95 of 540 minutes)
+rejected: page 999 of 320
+still on page 42 of 320

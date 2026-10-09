@@ -1,0 +1,8 @@
+price + tax = $21.59
+equal to $21.59: true
+built-in &&:
+  evaluated left
+overloaded &&:
+  evaluated left
+  evaluated right
+results: false false
