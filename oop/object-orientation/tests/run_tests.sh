@@ -49,7 +49,9 @@ fi
 # 3. Compile-fail examples must be rejected, and for the reason they exist.
 expect_error() {   # expect_error <file> <regex the diagnostic must match>
     local file=$1 pattern=$2 log
-    if log=$("$CXX" -std="$STD" -c "$HERE/tests/compile-fail/$file" -o "$OUT/cf.o" 2>&1); then
+    # LC_ALL=C: under a UTF-8 locale GCC quotes names with curly quotes,
+    # which a pattern written with ASCII quotes would not match.
+    if log=$(LC_ALL=C "$CXX" -std="$STD" -c "$HERE/tests/compile-fail/$file" -o "$OUT/cf.o" 2>&1); then
         fail "$file compiled but must not"
     elif grep -qE -- "$pattern" <<<"$log"; then
         pass "$file is rejected"
@@ -61,7 +63,7 @@ expect_error() {   # expect_error <file> <regex the diagnostic must match>
 # same words).
 expect_error abstract_instance.cpp    "abstract (type|class)"
 expect_error default_private.cpp      "is private|private member"
-expect_error override_typo.cpp        "marked 'override'"
+expect_error override_typo.cpp        "marked .{1,3}override"   # either quote style
 expect_error visitor_missing_case.cpp "invoke_result|exhaustive|no matching"
 
 echo
