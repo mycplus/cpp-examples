@@ -1,0 +1,6 @@
+building a Copier:
+  Device(1) constructed
+  Device(2) constructed
+Scanner's Device id: 1
+Printer's Device id: 2
+sizeof(Device) = 4, sizeof(Copier) = 8

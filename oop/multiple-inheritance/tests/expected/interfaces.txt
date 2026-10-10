@@ -1,0 +1,4 @@
+print:  Invoice A-17: 249.50
+save:   {"id":"A-17","total":249.50}
+Printable part at offset    0
+Serializable part at offset 8

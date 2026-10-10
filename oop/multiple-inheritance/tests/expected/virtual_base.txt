@@ -1,0 +1,8 @@
+building a Copier:
+  Device(3) constructed
+one Device, id 3
+same object: true
+sizeof(Copier) = 24
+building a Scanner on its own:
+  Device(1) constructed
+its Device id: 1

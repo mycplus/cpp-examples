@@ -1,0 +1,5 @@
+engine started
+battery charging
+power:    150 kW
+capacity: 60 kWh
+qualified: 150 and 60
