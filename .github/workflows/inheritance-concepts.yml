@@ -1,0 +1,32 @@
+name: inheritance-concepts
+
+on:
+  push:
+    paths: ['oop/inheritance-concepts/**', '.github/workflows/inheritance-concepts.yml']
+  pull_request:
+    paths: ['oop/inheritance-concepts/**', '.github/workflows/inheritance-concepts.yml']
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: oop/inheritance-concepts
+
+jobs:
+  test:
+    name: C++ (${{ matrix.cxx }}), Java 21, Python 3.12
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run all three languages and compare with the article
+        run: bash tests/run_tests.sh ${{ matrix.cxx }}

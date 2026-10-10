@@ -1,0 +1,3 @@
+to ops-team: Disk usage on db-01 is above 90 percent
+to ada@example.com: [email] Disk usage on db-01 is above 90 percent
+to +1-555-0100: [sms] Disk usage on db-01

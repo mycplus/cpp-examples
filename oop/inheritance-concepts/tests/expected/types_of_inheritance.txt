@@ -1,0 +1,4 @@
+Scanner      MRO: Scanner -> Device -> object
+Copier       MRO: Copier -> Scanner -> Printer -> Device -> object
+ColorCopier  MRO: ColorCopier -> Copier -> Scanner -> Printer -> Device -> object
+Copier is a Device: True
