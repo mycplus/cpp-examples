@@ -1,0 +1,6 @@
+ColorPrinter::print(3)
+Printer::print()
+Printer::print("draft")
+FixedPrinter::print(3)
+Printer::print()
+Printer::print("final")

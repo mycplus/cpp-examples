@@ -1,0 +1,10 @@
+creating:
+  construct Base member
+  Base constructor body
+  construct Derived member
+  Derived constructor body
+destroying:
+  Derived destructor body
+  destroy   Derived member
+  Base destructor body
+  destroy   Base member

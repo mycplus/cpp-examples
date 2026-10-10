@@ -1,0 +1,3 @@
+payment fee on 100.00: 2
+card fee on 100.00: 3.2
+bank transfer fee on 100.00: 1

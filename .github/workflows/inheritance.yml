@@ -1,0 +1,70 @@
+name: inheritance
+
+on:
+  push:
+    paths: ['oop/inheritance/**', '.github/workflows/inheritance.yml']
+  pull_request:
+    paths: ['oop/inheritance/**', '.github/workflows/inheritance.yml']
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: oop/inheritance
+
+jobs:
+  linux:
+    name: Linux ${{ matrix.cxx }} ${{ matrix.std }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [c++17, c++20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build, run and compare with the article
+        run: bash tests/run_tests.sh ${{ matrix.cxx }} ${{ matrix.std }}
+
+  sanitizers:
+    name: Sanitizers ${{ matrix.cxx }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the Clang sanitizer runtime
+        if: matrix.cxx == 'clang++'
+        run: sudo apt-get update && sudo apt-get install -y libclang-rt-18-dev
+      - name: Correct examples clean, missing virtual destructor reported
+        run: bash tests/sanitizers.sh ${{ matrix.cxx }}
+
+  macos:
+    name: macOS Apple Clang
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with warnings as errors and compare with the article
+        run: bash tests/run_tests.sh clang++ c++17
+
+  windows:
+    name: Windows MSVC
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Build with /W4 /WX and compare with the article
+        shell: pwsh
+        # PowerShell rather than Git Bash: Git's /usr/bin/link can shadow MSVC's link.exe.
+        run: |
+          New-Item -ItemType Directory -Force out | Out-Null
+          foreach ($p in 'basics', 'access', 'order', 'inheriting_ctors', 'hiding',
+                         'final_and_override', 'array_pitfall', 'virtual_dtor') {
+            $log = cl /nologo /std:c++17 /EHsc /O2 /W4 /WX "/Fe:out\$p.exe" "/Fo:out\$p.obj" "src\$p.cpp" 2>&1
+            if ($LASTEXITCODE -ne 0) { $log | Write-Output; Write-Output "BUILD FAILED: $p"; exit 1 }
+            $got  = (& "out\$p.exe") -join "`n"
+            $want = (Get-Content "tests\expected\$p.txt") -join "`n"
+            if ($got -ne $want) { Write-Output "MISMATCH $p`n--- got`n$got`n--- want`n$want"; exit 1 }
+            Write-Output "PASS  $p"
+          }

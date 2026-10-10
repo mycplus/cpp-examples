@@ -1,0 +1,5 @@
+Derived sees pub = 1, prot = 2
+outside sees d.pub = 1
+friend sees priv = 3
+struct-derived: s.pub = 1
+class-derived: c.read_pub() = 1
