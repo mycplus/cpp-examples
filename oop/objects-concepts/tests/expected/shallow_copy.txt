@@ -1,0 +1,5 @@
+original: road trip ['intro', 'chorus', 'bridge']
+shallow:  copy ['intro', 'chorus', 'bridge']
+deep:     road trip ['intro', 'chorus']
+shallow shares songs: True
+deep shares songs:    False

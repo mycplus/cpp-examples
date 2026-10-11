@@ -1,0 +1,4 @@
+p1 == p2 (equal values):  true
+&p1 == &p2 (same object): false
+after q = p1; q.x = 99:   p1.x = 1, q.x = 99
+after r = ref to p1; r.x = 99:   p1.x = 99

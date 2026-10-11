@@ -1,0 +1,4 @@
+open app.log
+write started
+close app.log
+after the block

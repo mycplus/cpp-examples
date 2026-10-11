@@ -1,0 +1,4 @@
+p1.equals(p2) (equal values): true
+p1 == p2 (same object):       false
+after q = p1; q.x = 99:   p1.x = 99, q.x = 99
+after c = copy of p1; c.x = 99:   p1.x = 1
