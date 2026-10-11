@@ -1,0 +1,7 @@
+Ada opened with 100
+deposit 50 -> balance 150
+withdraw 30 -> balance 120
+error: insufficient funds: balance 120, requested 500
+error: amount must be positive: -5
+balance 120
+history: +100 +50 -30

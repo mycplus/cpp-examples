@@ -1,0 +1,4 @@
+radius 2.0, area 12.57
+error: radius must be non-negative: -1
+radius still 2.0
+after c._radius = -1: radius -1

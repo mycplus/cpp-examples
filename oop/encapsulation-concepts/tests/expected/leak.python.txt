@@ -1,0 +1,4 @@
+leaky: added Ana, Ben, Cy -> 3 members
+leaky: caller appended twice -> 5 members (limit is 3)
+safe: added Ana, Ben, Cy -> 3 members
+safe: append rejected (AttributeError), team still has 3 members

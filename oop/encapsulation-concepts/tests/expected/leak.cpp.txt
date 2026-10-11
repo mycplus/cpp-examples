@@ -1,0 +1,4 @@
+leaky: added Ana, Ben, Cy -> 3 members
+leaky: caller appended twice -> 5 members (limit is 3)
+safe: added Ana, Ben, Cy -> 3 members
+safe: caller's copy has 4, team still has 3 members
