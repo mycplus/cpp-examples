@@ -1,0 +1,4 @@
+standard 2 kg: 5.00
+express  2 kg: 12.00
+pickup   2 kg: 0.00
+courier  2 kg: 7.50
