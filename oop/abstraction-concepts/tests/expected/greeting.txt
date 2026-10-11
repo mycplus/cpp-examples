@@ -1,0 +1,4 @@
+08:00 -> Good morning
+14:00 -> Good afternoon
+21:00 -> Good evening
+system clock: hour in 0..23 = true, greeting known = true

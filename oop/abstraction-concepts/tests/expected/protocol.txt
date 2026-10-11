@@ -1,0 +1,2 @@
+Sundial (no base class) -> Good morning
+BrokenClock() -> TypeError: the abstract method hour() was not implemented
