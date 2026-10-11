@@ -1,0 +1,2 @@
+SharedCart: ['book', 'lamp'] ['book', 'lamp'] same list: True
+Cart:       ['book'] ['lamp'] same list: False

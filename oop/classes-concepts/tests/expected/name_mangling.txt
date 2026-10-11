@@ -1,0 +1,4 @@
+acct._balance = 100
+AttributeError: 'Account' object has no attribute '__pin'
+acct._Account__pin = 1234
+attributes: ['_Account__pin', '_balance']
