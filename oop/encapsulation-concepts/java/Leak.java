@@ -11,7 +11,7 @@ public final class Leak {
         private final List<String> members = new ArrayList<>();
 
         void add(String name) {
-            if (members.size() == LIMIT) throw new IllegalStateException("team is full");
+            if (members.size() >= LIMIT) throw new IllegalStateException("team is full");
             members.add(name);
         }
         List<String> members() { return members; }  // the private list itself
@@ -21,7 +21,7 @@ public final class Leak {
         private final List<String> members = new ArrayList<>();
 
         void add(String name) {
-            if (members.size() == LIMIT) throw new IllegalStateException("team is full");
+            if (members.size() >= LIMIT) throw new IllegalStateException("team is full");
             members.add(name);
         }
         List<String> members() { return Collections.unmodifiableList(members); }  // read-only view

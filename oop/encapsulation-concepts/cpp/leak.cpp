@@ -11,7 +11,7 @@ constexpr std::size_t kLimit = 3;
 class LeakyTeam {
 public:
     void add(const std::string& name) {
-        if (members_.size() == kLimit) throw std::length_error("team is full");
+        if (members_.size() >= kLimit) throw std::length_error("team is full");
         members_.push_back(name);
     }
     std::vector<std::string>& members() { return members_; }  // the private vector itself
@@ -23,7 +23,7 @@ private:
 class Team {
 public:
     void add(const std::string& name) {
-        if (members_.size() == kLimit) throw std::length_error("team is full");
+        if (members_.size() >= kLimit) throw std::length_error("team is full");
         members_.push_back(name);
     }
     const std::vector<std::string>& members() const { return members_; }  // read-only

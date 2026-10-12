@@ -9,7 +9,7 @@ class LeakyTeam:
         self._members: list[str] = []
 
     def add(self, name: str) -> None:
-        if len(self._members) == LIMIT:
+        if len(self._members) >= LIMIT:
             raise ValueError("team is full")
         self._members.append(name)
 
@@ -23,7 +23,7 @@ class Team:
         self._members: list[str] = []
 
     def add(self, name: str) -> None:
-        if len(self._members) == LIMIT:
+        if len(self._members) >= LIMIT:
             raise ValueError("team is full")
         self._members.append(name)
 
