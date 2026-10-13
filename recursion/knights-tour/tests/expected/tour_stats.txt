@@ -1,0 +1,17 @@
+Board  Starts  Warnsdorff alone  With backtracking  Most squares placed
+ 5x5       13                12                 13                   25
+ 6x6       36                35                 36                   36
+ 7x7       25                18                 25               982160
+ 8x8       64                63                 64                   64
+ 9x9       41                41                 41                   81
+10x10     100                98                100                  100
+11x11      61                61                 61                  136
+12x12     144               138                144                  144
+
+Warnsdorff alone on 8x8 from (4, 2): stuck after 60 of 64 squares
+
+Backtracking from the corner, squares placed before the first tour:
+  5x5:       14009 in plain move order,  25 in Warnsdorff order
+  6x6:       58692 in plain move order,  36 in Warnsdorff order
+  7x7:       18818 in plain move order,  49 in Warnsdorff order
+  8x8:    27241113 in plain move order,  64 in Warnsdorff order

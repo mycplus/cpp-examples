@@ -1,0 +1,7 @@
+Knight's tour, 5 x 5 board, starting at (0, 0):
+  1 10 21 16  7
+ 20 15  8 11 22
+  9  2 25  6 17
+ 14 19  4 23 12
+  3 24 13 18  5
+Open tour: 24 moves, 0 backtracked.
