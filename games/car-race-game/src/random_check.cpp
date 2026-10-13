@@ -8,7 +8,7 @@
 int main()
 {
     std::mt19937 a;
-    for (int i = 1; i < 10000; ++i) a();
+    a.discard(9999);                    // skip the first 9,999 outputs
     std::printf("10000th mt19937 value: %u\n", static_cast<unsigned>(a()));
 
     std::mt19937 rng(1);
