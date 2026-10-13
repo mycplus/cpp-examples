@@ -1,0 +1,24 @@
+easy   seed 1: finished at 600 of 600, 35.0 s used of 39 s, 21 lane changes, 0 of 62 cars dropped
+Normal traffic, seed 1, after 408 ticks:
++--------------------+
+|      : .--. :      |
+| .--. : |XX| :      |
+| |XX|   '--'        |
+| '--'               |
+| .--. :      :      |
+| |XX| :      :      |
+| '--'               |
+|                    |
+|      :      :      |
+|      :      : .--. |
+|               |XX| |
+|               '--' |
+|      :      :      |
+|      :      : .--. |
+|         ^^    |XX| |
+|        [##]   '--' |
+| .--. : [##] :      |
+| |XX| :      : .--. |
++--------------------+
+normal seed 1: finished at 600 of 600, 35.0 s used of 39 s, 29 lane changes, 7 of 99 cars dropped
+hard   seed 1: finished at 600 of 600, 35.0 s used of 39 s, 37 lane changes, 10 of 129 cars dropped

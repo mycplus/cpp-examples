@@ -1,0 +1,10 @@
+Spawn chance  Cars/race  Naive: no route  Fair: no route  Fair: cars dropped
+      6.0%       34.7         275 of 1000          0 of 1000            1.0%
+     10.0%       58.1         756 of 1000          0 of 1000            2.6%
+     16.0%       93.3         994 of 1000          0 of 1000            5.6%
+     22.0%      127.9        1000 of 1000          0 of 1000            8.9%
+
+Seed 1, naive: no lane is safe at tick 44. Cars that block it:
+  lane 0, spawned at tick 27, level with the player on ticks 42-46
+  lane 1, spawned at tick 28, level with the player on ticks 43-47
+  lane 2, spawned at tick 29, level with the player on ticks 44-48
