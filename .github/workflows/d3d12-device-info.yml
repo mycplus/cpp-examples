@@ -1,0 +1,33 @@
+name: d3d12-device-info
+on:
+  push:
+    paths: ['graphics/d3d12-device-info/**', '.github/workflows/d3d12-device-info.yml']
+  pull_request:
+    paths: ['graphics/d3d12-device-info/**', '.github/workflows/d3d12-device-info.yml']
+  workflow_dispatch:
+
+jobs:
+  windows-msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure and build with MSVC (/W4 /WX)
+        run: |
+          cmake -S graphics/d3d12-device-info -B build
+          cmake --build build --config Release
+      - name: Create a device (WARP on CI) and a command queue
+        shell: bash
+        run: |
+          ./build/Release/d3d12_device_info.exe | tee out.txt
+          grep -q '^PASS' out.txt
+  mingw-cross:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MinGW-w64
+        run: sudo apt-get update && sudo apt-get install -y g++-mingw-w64-x86-64
+      - name: Cross-compile with warnings as errors
+        run: |
+          cd graphics/d3d12-device-info/src
+          x86_64-w64-mingw32-g++ -std=c++17 -Wall -Wextra -Werror -O2 \
+              -o d3d12_device_info.exe d3d12_device_info.cpp -ld3d12 -ldxgi

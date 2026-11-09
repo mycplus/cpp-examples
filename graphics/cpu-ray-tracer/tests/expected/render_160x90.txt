@@ -1,0 +1,8 @@
+image: 160x90
+sky pixels: 5262
+ground pixels: 7442
+red pixels: 620
+mirror pixels: 456
+blue pixels: 620
+pixels in shadow: 667
+wrote test_render.ppm

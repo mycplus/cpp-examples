@@ -1,0 +1,51 @@
+name: tone-mapping
+
+on:
+  push:
+    paths: ['graphics/tone-mapping/**', '.github/workflows/tone-mapping.yml']
+  pull_request:
+    paths: ['graphics/tone-mapping/**', '.github/workflows/tone-mapping.yml']
+
+defaults:
+  run:
+    working-directory: graphics/tone-mapping
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [g++, clang++]
+        std: [17, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install glslang (compiles the GLSL shader in CTest)
+        run: sudo apt-get update && sudo apt-get install -y glslang-tools
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cc }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} -DCMAKE_BUILD_TYPE=Release
+      - name: Build (warnings are errors)
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tests and demo under ASan and UBSan
+        run: |
+          flags="-std=c++17 -Wall -Wextra -pedantic -Werror -g -fsanitize=address,undefined -fno-sanitize-recover=all"
+          g++ $flags tests/test_tonemap.cpp -o t && ./t
+          g++ $flags src/tone_mapping.cpp -o d && ./d  > /dev/null
+
+  msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build
+      - name: Build (/W4 /WX /permissive-)
+        run: cmake --build build --config Release
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure

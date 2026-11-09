@@ -1,0 +1,45 @@
+name: vulkan-device-info
+
+on:
+  push:
+    paths: ['graphics/vulkan-device-info/**', '.github/workflows/vulkan-device-info.yml']
+  pull_request:
+    paths: ['graphics/vulkan-device-info/**', '.github/workflows/vulkan-device-info.yml']
+
+defaults:
+  run:
+    working-directory: graphics/vulkan-device-info
+
+env:
+  # Mesa's lavapipe: a Vulkan driver that runs on the CPU, so no GPU is needed.
+  VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/lvp_icd.json
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [g++, clang++]
+        std: [17, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Vulkan headers, loader and lavapipe
+        run: sudo apt-get update && sudo apt-get install -y libvulkan-dev mesa-vulkan-drivers
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cc }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} -DCMAKE_BUILD_TYPE=Release
+      - name: Build (warnings are errors)
+        run: cmake --build build
+      - name: Test on lavapipe
+        run: ctest --test-dir build --output-on-failure && ./build/vulkan_device_info
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Vulkan headers, loader and lavapipe
+        run: sudo apt-get update && sudo apt-get install -y libvulkan-dev mesa-vulkan-drivers
+      - name: Run under ASan and UBSan
+        run: |
+          flags="-std=c++17 -Wall -Wextra -pedantic -Werror -g -fsanitize=address,undefined -fno-sanitize-recover=all"
+          g++ $flags src/vulkan_device_info.cpp -lvulkan -o d && ./d
