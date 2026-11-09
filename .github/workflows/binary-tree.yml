@@ -1,0 +1,50 @@
+name: binary-tree
+
+on:
+  push:
+    paths: ['data-structures/binary-tree/**', '.github/workflows/binary-tree.yml']
+  pull_request:
+    paths: ['data-structures/binary-tree/**', '.github/workflows/binary-tree.yml']
+
+defaults:
+  run:
+    working-directory: data-structures/binary-tree
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} -DCMAKE_BUILD_TYPE=Release
+      - name: Build (warnings are errors)
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tests and demo under ASan and UBSan
+        run: |
+          flags="-std=c++17 -Wall -Wextra -pedantic -Werror -g -fsanitize=address,undefined -fno-sanitize-recover=all -Iinclude"
+          g++ $flags tests/test_bst.cpp -o t && ./t
+          g++ $flags src/bst_demo.cpp -o d && ./d > /dev/null
+          g++ $flags pitfalls/less_equal.cpp -o le && ./le > /dev/null
+
+  msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build
+      - name: Build (/W4 /WX /permissive-)
+        run: cmake --build build --config Release
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
