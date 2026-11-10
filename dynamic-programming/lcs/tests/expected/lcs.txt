@@ -1,0 +1,12 @@
+ABCBDAB / BDCABA: length 4, "BCBA"
+AGGTAB / GXTXAYB: length 4, "GTAB"
+dynamic / programming: length 3, "ami"
+abc / xyz: length 0, ""
+common subsequence of two int lists: 1 4 5 9 2 6
+diff:
+- int total = 0;
++ long long total = 0;
+  for (int x : v)
+      total += x;
++ std::cout << total;
+  return total;
