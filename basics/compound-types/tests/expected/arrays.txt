@@ -1,0 +1,5 @@
+sizeof(prices) = 32 bytes, 4 elements
+sizeof(first) = 8 bytes: only the address is left
+total by pointer and count:  41.23
+total by reference to array: 41.23
+std::array: size() = 4, total = 41.23, copy total = 21.24

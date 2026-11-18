@@ -1,0 +1,6 @@
+sizeof(pointers) = 24 (three pointers)
+sizeof(to_row)   = 8 (one pointer)
+*pointers[1] = 2, (*to_row)[1] = 8
+fn(2.6) = 5
+counter = 101
+via aliases: 9, 2

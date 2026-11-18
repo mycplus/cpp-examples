@@ -1,0 +1,18 @@
+type                          kind         category
+int                           fundamental  fundamental
+double                        fundamental  fundamental
+bool                          fundamental  fundamental
+void                          fundamental  fundamental
+std::nullptr_t                fundamental  fundamental
+int[4]                        compound     array
+int(int, int)                 compound     function
+int*                          compound     pointer
+int&                          compound     lvalue reference
+int&&                         compound     rvalue reference
+Point (struct)                compound     class
+Account (class)               compound     class
+Number (union)                compound     union
+Color (enum class)            compound     enumeration
+int Point::*                  compound     pointer to data member
+double (Account::*)() const   compound     pointer to member function
+std::string                   compound     class

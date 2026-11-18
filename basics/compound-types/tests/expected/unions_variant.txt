@@ -1,0 +1,9 @@
+sizeof(Number) = 4 (members share the same 4 bytes)
+bits of 1.0f = 0x3f800000
+integer 30
+real 0.75
+int 42
+double 2.5
+string "blue"
+holds double? true
+std::get<int> on a double: std::bad_variant_access

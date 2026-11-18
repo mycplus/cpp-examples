@@ -1,0 +1,4 @@
+after pointer:   alice = 51, bob = 71
+after reference: alice = 72, bob = 71
+after bonuses:   alice = 82, bob = 81
+read_only -> 82, re-pointed -> 86, fixed -> 86

@@ -1,0 +1,4 @@
+by name  : Lena Maya Omar Ravi
+by age   : Omar Lena Maya Ravi
+by salary: Ravi Omar Maya Lena
+Ravi: age 52, monthly 6333.33, via std::invoke 6333.33
