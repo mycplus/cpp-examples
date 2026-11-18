@@ -1,0 +1,14 @@
+--- client 1 (exit 0)
+client: sent "hello", got "ECHO HELLO"
+client: sent "named pipes", got "ECHO NAMED PIPES"
+--- client 2 (exit 0)
+client: sent "second client", got "ECHO SECOND CLIENT"
+--- server (exit 0)
+server: listening on pipe mycplus-NAME
+server: client connected
+server: received "hello"
+server: received "named pipes"
+server: client disconnected
+server: client connected
+server: received "second client"
+server: client disconnected

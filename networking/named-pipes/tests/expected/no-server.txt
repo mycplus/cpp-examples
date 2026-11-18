@@ -1,0 +1,2 @@
+--- client (exit 1)
+client: no server after 5 seconds

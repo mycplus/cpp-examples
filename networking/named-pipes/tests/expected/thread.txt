@@ -1,0 +1,23 @@
+--- client 1 (exit 0)
+client: sent "alpha", got "ECHO ALPHA"
+client: sent "alpha again", got "ECHO ALPHA AGAIN"
+--- client 2 (exit 0)
+client: sent "bravo", got "ECHO BRAVO"
+client: sent "bravo again", got "ECHO BRAVO AGAIN"
+--- client 3 (exit 0)
+client: sent "charlie", got "ECHO CHARLIE"
+client: sent "charlie again", got "ECHO CHARLIE AGAIN"
+--- server (exit 0)
+server: client # connected
+server: client # connected
+server: client # connected
+server: client # disconnected
+server: client # disconnected
+server: client # disconnected
+server: client # sent "alpha again"
+server: client # sent "alpha"
+server: client # sent "bravo again"
+server: client # sent "bravo"
+server: client # sent "charlie again"
+server: client # sent "charlie"
+server: listening on pipe mycplus-NAME

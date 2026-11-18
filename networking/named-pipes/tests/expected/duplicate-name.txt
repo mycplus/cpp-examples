@@ -1,0 +1,9 @@
+--- second server (exit 1)
+server: CreateNamedPipe failed: error 5 (ERROR_ACCESS_DENIED)
+--- client (exit 0)
+client: sent "still the first server", got "ECHO STILL THE FIRST SERVER"
+--- first server (exit 0)
+server: listening on pipe mycplus-NAME
+server: client 1 connected
+server: client 1 sent "still the first server"
+server: client 1 disconnected

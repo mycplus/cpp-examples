@@ -1,0 +1,8 @@
+--- client (exit 0)
+client: sent "<1500 bytes>", got "ECHO <1500 BYTES IN CAPITALS>"
+--- server (exit 0)
+server: client # connected on instance #
+server: client # disconnected
+server: client # sent "<1500 bytes>"
+server: clients served: 1
+server: listening on pipe mycplus-NAME with 4 instances

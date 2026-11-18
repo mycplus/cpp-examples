@@ -1,0 +1,37 @@
+name: Named Pipes
+
+on:
+  push:
+    paths: ['networking/named-pipes/**', '.github/workflows/named-pipes.yml']
+  pull_request:
+    paths: ['networking/named-pipes/**', '.github/workflows/named-pipes.yml']
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: networking/named-pipes
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test (MSVC)
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure
+
+  mingw-cross-compile:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: networking/named-pipes
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MinGW-w64
+        run: sudo apt-get update && sudo apt-get install -y g++-mingw-w64-x86-64-posix
+      - name: Cross-compile with warnings as errors
+        run: sh run_all.sh

@@ -26,6 +26,7 @@ C++ source code examples and projects accompanying C++ programming tutorials on 
 | [Tone Mapping](graphics/tone-mapping/) | Reinhard, extended Reinhard and ACES tone mapping in C++, plus the ACES curve as a GLSL shader. | [![Tone Mapping](https://github.com/mycplus/cpp-examples/actions/workflows/tone-mapping.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/tone-mapping.yml) |
 | [Vulkan Device Info](graphics/vulkan-device-info/) | Creates a Vulkan instance and lists each GPU, its queue families and ray tracing support. | [![Vulkan Device Info](https://github.com/mycplus/cpp-examples/actions/workflows/vulkan-device-info.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/vulkan-device-info.yml) |
 | [Direct3D 12 Device Info](graphics/d3d12-device-info/) | Creates a Direct3D 12 device (WARP if there is no GPU), checks the DXR tier and creates a command queue. | [![Direct3D 12 Device Info](https://github.com/mycplus/cpp-examples/actions/workflows/d3d12-device-info.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/d3d12-device-info.yml) |
+| [Named Pipes](networking/named-pipes/) | A Windows named pipe client with a simple, a multithreaded and an overlapped I/O server, tested together. | [![Named Pipes](https://github.com/mycplus/cpp-examples/actions/workflows/named-pipes.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/named-pipes.yml) |
 
 
 ## About
