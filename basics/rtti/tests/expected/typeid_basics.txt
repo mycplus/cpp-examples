@@ -1,0 +1,8 @@
+static type of shape:        Shape
+typeid(shape) (polymorphic): Circle
+typeid(plain) (not polymorphic): Plain
+typeid(const Circle) == typeid(Circle):  true
+typeid(Circle&) == typeid(Circle):       true
+typeid(shape) == typeid(Circle):         true
+typeid(*nullptr) threw std::bad_typeid
+circles: 2, squares: 1

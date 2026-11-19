@@ -1,0 +1,6 @@
+a is Savings, rate 0.025
+b is not Savings: dynamic_cast returned nullptr
+dynamic_cast<Savings&>(*b) threw std::bad_cast
+cross-cast Printable* -> Serializable*: ok
+both bases lead to the same object: true
+Printable* and Serializable* hold the same address: false

@@ -1,0 +1,5 @@
+Widget constructor: typeid(*this) is Widget, kind() says widget
+Button constructor: typeid(*this) is Button, kind() says button
+main: typeid(*this) is Button, kind() says button
+Button destructor: typeid(*this) is Button, kind() says button
+Widget destructor: typeid(*this) is Widget, kind() says widget

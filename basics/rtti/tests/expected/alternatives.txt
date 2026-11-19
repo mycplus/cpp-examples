@@ -1,0 +1,3 @@
+dynamic_cast:     total area 9
+virtual function: total area 9
+std::variant:     total area 9
