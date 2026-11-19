@@ -1,0 +1,52 @@
+name: IP Configuration
+
+on:
+  push:
+    paths: ['networking/ip-configuration/**', '.github/workflows/ip-configuration.yml']
+  pull_request:
+    paths: ['networking/ip-configuration/**', '.github/workflows/ip-configuration.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: networking/ip-configuration
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+      - name: Add and remove addresses (needs root)
+        run: sudo ./build/change_test
+      - name: Sanitizers
+        run: |
+          cmake -S . -B asan -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
+                -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-sanitize-recover=all -g"
+          cmake --build asan
+          ctest --test-dir asan --output-on-failure
+          sudo ./asan/change_test
+
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: networking/ip-configuration
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test (MSVC; the runner is an administrator, so change_test runs)
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure
