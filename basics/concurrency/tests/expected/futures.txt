@@ -1,0 +1,4 @@
+async sum: 500500
+exception from the other thread: value must be positive
+hello from a promise
+packaged_task result: 42

@@ -1,0 +1,4 @@
+worker filled 5 numbers, first 10
+label after thread: unchanged
+sum of 0..999 from 4 threads: 499500
+hardware threads reported: at least 1

@@ -1,0 +1,4 @@
+jthread stopped after at least 5 ticks: true
+latch: all 3 workers ready
+barrier: 4 phases completed
+semaphore: at most 2 threads inside at once

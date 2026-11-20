@@ -1,0 +1,60 @@
+name: Concurrency
+
+on:
+  push:
+    paths: ['basics/concurrency/**', '.github/workflows/concurrency.yml']
+  pull_request:
+    paths: ['basics/concurrency/**', '.github/workflows/concurrency.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: basics/concurrency
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build
+          ctest --test-dir build --output-on-failure --repeat until-fail:5
+      - name: AddressSanitizer and UndefinedBehaviorSanitizer
+        run: |
+          cmake -S . -B asan -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
+                -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-sanitize-recover=all -g"
+          cmake --build asan
+          ctest --test-dir asan --output-on-failure
+      - name: ThreadSanitizer
+        run: |
+          # Newer kernels randomize mmap addresses more than older TSan runtimes expect.
+          sudo sysctl vm.mmap_rnd_bits=28
+          cmake -S . -B tsan -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
+                -DCMAKE_CXX_FLAGS="-fsanitize=thread -g -O1"
+          cmake --build tsan
+          ctest --test-dir tsan --output-on-failure
+          # The racy counter must be reported (ThreadSanitizer exits with 66).
+          set +e; ./tsan/counter racy; rc=$?; set -e
+          test "$rc" -eq 66
+
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: basics/concurrency
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test (MSVC)
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure --repeat until-fail:5
