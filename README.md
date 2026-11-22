@@ -32,6 +32,7 @@ C++ source code examples and projects accompanying C++ programming tutorials on 
 | [Named Pipes](networking/named-pipes/) | A Windows named pipe client with a simple, a multithreaded and an overlapped I/O server, tested together. | [![Named Pipes](https://github.com/mycplus/cpp-examples/actions/workflows/named-pipes.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/named-pipes.yml) |
 | [IP Configuration](networking/ip-configuration/) | List network interfaces and add or remove IPv4 and IPv6 addresses on Windows and Linux. | [![IP Configuration](https://github.com/mycplus/cpp-examples/actions/workflows/ip-configuration.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/ip-configuration.yml) |
 | [JSON Validation](data-formats/json-validation/) | Validate JSON with nlohmann/json: syntax errors with positions, field and type checks, and where parsers disagree. | [![JSON Validation](https://github.com/mycplus/cpp-examples/actions/workflows/json-validation.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/json-validation.yml) |
+| [Defensive Programming](practices/defensive-programming/) | from_chars parsing, [[nodiscard]] status codes, RAII file copy and bounds checks, the C++ twin of the C example. | [![Defensive Programming](https://github.com/mycplus/cpp-examples/actions/workflows/defensive-programming.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/defensive-programming.yml) |
 
 
 ## About
