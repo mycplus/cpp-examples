@@ -49,11 +49,12 @@ if(ARCH STREQUAL "x64")
   deps_test(eh_demo        "VCRUNTIME140_1\\.dll")
   deps_test(eh_demo_nofh4  "VCRUNTIME140\\.dll"  "VCRUNTIME140_1\\.dll")
   deps_test(hello          "VCRUNTIME140\\.dll"  "VCRUNTIME140_1\\.dll")
-elseif(ARCH STREQUAL "X86")
+elseif(ARCH STREQUAL "X86" OR ARCH STREQUAL "ARM64")
+  # Only x64 builds import VCRUNTIME140_1.dll (ARM64 confirmed with MSVC 14.52).
   deps_test(eh_demo        "VCRUNTIME140\\.dll"  "VCRUNTIME140_1\\.dll")
   deps_test(hello          "VCRUNTIME140\\.dll"  "VCRUNTIME140_1\\.dll")
 else()
-  # ARM64 and anything else: record what the linker chose, without asserting it.
+  # Anything else: record what the linker chose, without asserting it.
   add_test(NAME eh_demo_imports_info COMMAND "${DUMPBIN}" /dependents $<TARGET_FILE:eh_demo>)
 endif()
 deps_test(eh_demo_static "KERNEL32\\.dll" "VCRUNTIME140")
