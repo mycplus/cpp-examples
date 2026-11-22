@@ -1,0 +1,37 @@
+name: VCRUNTIME
+
+on:
+  push:
+    paths: ['windows/vcruntime/**', '.github/workflows/vcruntime.yml']
+  pull_request:
+    paths: ['windows/vcruntime/**', '.github/workflows/vcruntime.yml']
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x64, Win32, ARM64]
+    defaults:
+      run:
+        working-directory: windows/vcruntime
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and check imports (MSVC)
+        run: |
+          cmake -S . -B build -A ${{ matrix.platform }}
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure
+
+  mingw-cross-compile:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: windows/vcruntime
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MinGW-w64
+        run: sudo apt-get update && sudo apt-get install -y g++-mingw-w64-x86-64-posix
+      - name: Cross-compile with warnings as errors
+        run: sh run_all.sh
