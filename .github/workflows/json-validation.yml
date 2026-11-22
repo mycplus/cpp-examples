@@ -1,0 +1,31 @@
+name: JSON Validation
+
+on:
+  push:
+    paths: ['data-formats/json-validation/**', '.github/workflows/json-validation.yml']
+  pull_request:
+    paths: ['data-formats/json-validation/**', '.github/workflows/json-validation.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: data-formats/json-validation
+    steps:
+      - uses: actions/checkout@v5
+      - name: GCC, Clang, sanitizers and deliberate mistakes
+        run: sh run_all.sh
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: data-formats/json-validation
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build and test (MSVC)
+        run: |
+          cmake -S . -B build -A x64
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure

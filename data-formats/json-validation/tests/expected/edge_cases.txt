@@ -1,0 +1,7 @@
+edge/big-integers.json: accepted, value [9007199254740993,1.2345678901234568e+22]
+edge/bom.json: accepted, value {"a":1}
+edge/deep-nesting.json: accepted
+edge/duplicate-keys.json: accepted, value {"a":2}
+edge/lone-surrogate.json: rejected ([json.exception.parse_error.101] parse error at line 1, column 8: syntax error while parsing value - invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF; last read: '"\ud800"')
+edge/nan.json: rejected ([json.exception.parse_error.101] parse error at line 1, column 11: syntax error while parsing value - invalid literal; last read: '"score": N')
+comment, ignore_comments=true: {"a":1}

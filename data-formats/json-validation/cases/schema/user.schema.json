@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/user.schema.json",
+  "title": "User",
+  "type": "object",
+  "required": ["id", "name", "email", "active", "roles"],
+  "properties": {
+    "id": { "type": "integer", "minimum": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "email": { "type": "string", "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" },
+    "active": { "type": "boolean" },
+    "roles": {
+      "type": "array",
+      "items": { "enum": ["admin", "editor", "viewer"] },
+      "uniqueItems": true
+    },
+    "manager": { "type": ["string", "null"] },
+    "score": { "type": "number", "minimum": 0, "maximum": 100 },
+    "address": {
+      "type": "object",
+      "required": ["city"],
+      "properties": {
+        "city": { "type": "string" },
+        "postcode": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

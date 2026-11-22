@@ -1,0 +1,25 @@
+valid/array.json: valid
+valid/escapes.json: valid
+valid/number.json: valid
+valid/numbers.json: valid
+valid/string.json: valid
+valid/user.json: valid
+valid/whitespace.json: valid
+invalid/bad-escape.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 14: syntax error while parsing value - invalid string: forbidden character after backslash; last read: '"C:\U')
+invalid/capital-true.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 12: syntax error while parsing value - invalid literal; last read: '"active": T')
+invalid/comment.json: invalid ([json.exception.parse_error.101] parse error at line 2, column 10: syntax error while parsing object - invalid literal; last read: '1 /'; expected '}')
+invalid/empty.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 1: attempting to parse an empty input; check that your input string or stream contains the expected JSON)
+invalid/hex-number.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 11: syntax error while parsing object - invalid literal; last read: '0x'; expected '}')
+invalid/html-page.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 1: syntax error while parsing value - invalid literal; last read: '<')
+invalid/leading-dot.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 11: syntax error while parsing value - invalid literal; last read: '"ratio": .')
+invalid/leading-zero.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 14: syntax error while parsing object - unexpected number literal; expected '}')
+invalid/mismatched-bracket.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 12: syntax error while parsing array - unexpected '}'; expected ']')
+invalid/missing-comma.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 11: syntax error while parsing object - unexpected string literal; expected '}')
+invalid/nan.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 11: syntax error while parsing value - invalid literal; last read: '"score": N')
+invalid/raw-newline.json: invalid ([json.exception.parse_error.101] parse error at line 2, column 0: syntax error while parsing value - invalid string: control character U+000A (LF) must be escaped to \u000A or \n; last read: '"one<U+000A>')
+invalid/single-quotes.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 2: syntax error while parsing object key - invalid literal; last read: '{''; expected string literal)
+invalid/trailing-comma.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 17: syntax error while parsing object key - unexpected '}'; expected string literal)
+invalid/two-values.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 9: syntax error while parsing value - unexpected '{'; expected end of input)
+invalid/unclosed.json: invalid ([json.exception.parse_error.101] parse error at line 2, column 1: syntax error while parsing object - unexpected end of input; expected '}')
+invalid/undefined.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 10: syntax error while parsing value - invalid literal; last read: '"note": u')
+invalid/unquoted-key.json: invalid ([json.exception.parse_error.101] parse error at line 1, column 3: syntax error while parsing object key - invalid literal; last read: '{na'; expected string literal)

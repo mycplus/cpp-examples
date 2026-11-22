@@ -1,0 +1,3 @@
+# Keep the test cases byte for byte (line endings and the BOM matter).
+cases/** -text
+tests/expected/* text eol=lf

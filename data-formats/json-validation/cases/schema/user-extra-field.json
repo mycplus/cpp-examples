@@ -1,0 +1,14 @@
+{
+  "id": 1024,
+  "name": "Ada Lovelace",
+  "email": "ada@example.com",
+  "active": true,
+  "nickname": "ada",
+  "roles": ["admin", "editor"],
+  "manager": null,
+  "score": 98.6,
+  "address": {
+    "city": "London",
+    "postcode": "W1"
+  }
+}

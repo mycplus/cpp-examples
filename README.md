@@ -31,6 +31,7 @@ C++ source code examples and projects accompanying C++ programming tutorials on 
 | [Direct3D 12 Device Info](graphics/d3d12-device-info/) | Creates a Direct3D 12 device (WARP if there is no GPU), checks the DXR tier and creates a command queue. | [![Direct3D 12 Device Info](https://github.com/mycplus/cpp-examples/actions/workflows/d3d12-device-info.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/d3d12-device-info.yml) |
 | [Named Pipes](networking/named-pipes/) | A Windows named pipe client with a simple, a multithreaded and an overlapped I/O server, tested together. | [![Named Pipes](https://github.com/mycplus/cpp-examples/actions/workflows/named-pipes.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/named-pipes.yml) |
 | [IP Configuration](networking/ip-configuration/) | List network interfaces and add or remove IPv4 and IPv6 addresses on Windows and Linux. | [![IP Configuration](https://github.com/mycplus/cpp-examples/actions/workflows/ip-configuration.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/ip-configuration.yml) |
+| [JSON Validation](data-formats/json-validation/) | Validate JSON with nlohmann/json: syntax errors with positions, field and type checks, and where parsers disagree. | [![JSON Validation](https://github.com/mycplus/cpp-examples/actions/workflows/json-validation.yml/badge.svg)](https://github.com/mycplus/cpp-examples/actions/workflows/json-validation.yml) |
 
 
 ## About

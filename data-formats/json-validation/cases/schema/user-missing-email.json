@@ -1,0 +1,12 @@
+{
+  "id": 1024,
+  "name": "Ada Lovelace",
+  "active": true,
+  "roles": ["admin", "editor"],
+  "manager": null,
+  "score": 98.6,
+  "address": {
+    "city": "London",
+    "postcode": "W1"
+  }
+}

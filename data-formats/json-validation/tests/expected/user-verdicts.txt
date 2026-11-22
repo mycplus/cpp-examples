@@ -1,0 +1,6 @@
+schema/user-bad-role.json: invalid
+schema/user-extra-field.json: invalid
+schema/user-missing-email.json: invalid
+schema/user-ok.json: valid
+schema/user-score-range.json: invalid
+schema/user-wrong-types.json: invalid

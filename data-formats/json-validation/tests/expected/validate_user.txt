@@ -1,0 +1,12 @@
+schema/user-bad-role.json: invalid
+  /roles/1: must be admin, editor or viewer
+schema/user-extra-field.json: invalid
+  /: unexpected field "nickname"
+schema/user-missing-email.json: invalid
+  /: missing required field "email"
+schema/user-ok.json: valid
+schema/user-score-range.json: invalid
+  /score: must be a number from 0 to 100
+schema/user-wrong-types.json: invalid
+  /id: must be an integer >= 1
+  /score: must be a number from 0 to 100
