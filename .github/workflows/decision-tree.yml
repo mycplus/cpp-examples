@@ -1,0 +1,48 @@
+name: Decision Tree
+
+on:
+  push:
+    paths: ['machine-learning/decision-tree/**', '.github/workflows/decision-tree.yml']
+  pull_request:
+    paths: ['machine-learning/decision-tree/**', '.github/workflows/decision-tree.yml']
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx: [g++, clang++]
+        std: [17, 20]
+    defaults:
+      run:
+        working-directory: machine-learning/decision-tree
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: |
+          cmake -S . -B build -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }}
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+      - name: Sanitizers
+        run: |
+          cmake -S . -B asan -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
+                -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-sanitize-recover=all -g"
+          cmake --build asan
+          ctest --test-dir asan --output-on-failure
+      - name: Deliberate mistakes are caught
+        if: matrix.cxx == 'g++' && matrix.std == 17
+        run: python3 tests/mutations.py g++
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: machine-learning/decision-tree
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test (MSVC)
+        run: |
+          cmake -S . -B build
+          cmake --build build --config Release
+          ctest --test-dir build -C Release --output-on-failure
