@@ -1,0 +1,18 @@
+wine: 133 training rows, 45 test rows, 13 features
+share of squared distance from proline, unscaled: 99.7%
+share of squared distance from proline, standardized: 7.7%
+
+correct test predictions (of 45)
+ k  metric     unscaled  standardized
+ 1  euclidean        33            43
+ 5  euclidean        35            42
+27  euclidean        35            43
+ 7  manhattan        38            44
+
+nearest training rows to test row 0 (class 0), standardized
+rank  row  class  distance
+   1   50      0  1.389466
+   2  108      0  1.904063
+   3  130      0  1.919836
+   4  122      0  1.963002
+   5   52      0  1.963258
